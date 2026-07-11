@@ -61,4 +61,8 @@ public/images/floodhub.png
 public/images/next1.webp
 public/images/phoenix.png
 public/images/project-2.webp
-public/images/node2.webppublic/models/character.glb
+public/images/node2.webp
+
+# Broken Git LFS pointer stub from the original template (no recoverable
+# content; the app loads the encrypted public/models/character.enc instead)
+public/models/character.glb
