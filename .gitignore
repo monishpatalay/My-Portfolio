@@ -1,0 +1,64 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.npmrc
+
+backup/
+.env
+redoxchess-engine/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Local agent/tooling session state (not part of the project)
+.swarm/
+
+# Local-only dev artifacts, not part of the published repo
+vite.config.old.ts
+test.js
+build_errors.txt
+build_output.txt
+screen-capture*.webm
+Screenshot_*.png
+
+# Unused leftover images from the original template (never referenced in src/)
+public/images/next2.webp
+public/images/mypic.jpeg
+public/images/project-1.webp
+public/images/redxchess.png
+public/images/eie.png
+public/images/drishti.png
+public/images/nextBL.webp
+public/images/hektools.png
+public/images/gamekroy.png
+public/images/mypicnbg.png
+public/images/project-5.webp
+public/images/votechain.png
+public/images/react2.webp
+public/images/project-4.webp
+public/images/floodhub.png
+public/images/next1.webp
+public/images/phoenix.png
+public/images/project-2.webp
+public/images/node2.webppublic/models/character.glb
