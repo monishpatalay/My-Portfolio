@@ -5,9 +5,9 @@ const VALID_ROLES = new Set(['user', 'assistant', 'system']);
 
 const LOCAL_DEV_ORIGINS = new Set(['http://localhost:5173', 'http://localhost:4173']);
 
-// This endpoint has no auth and spends a shared Groq API budget on every
-// call, so anything not clearly same-origin (or an explicitly configured
-// extra origin) is rejected before it can reach Groq.
+// This endpoint has no auth and spends a shared OpenRouter API budget on
+// every call, so anything not clearly same-origin (or an explicitly
+// configured extra origin) is rejected before it can reach OpenRouter.
 function isAllowedOrigin(origin, req) {
     if (!origin) return false;
     if (LOCAL_DEV_ORIGINS.has(origin)) return true;
@@ -83,34 +83,40 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: validationError });
     }
 
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY;
 
     if (!apiKey) {
         return res.status(500).json({ error: 'Server configuration error: Missing API Key' });
     }
 
     try {
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                // Recommended by OpenRouter for attribution/rankings; safe to
+                // leave as-is even before a custom domain is attached.
+                'HTTP-Referer': `https://${req.headers.host}`,
+                'X-Title': 'Monish Patalay Portfolio'
             },
             body: JSON.stringify({
                 messages,
-                model: 'llama-3.3-70b-versatile'
+                // Free tier: fine for a low-traffic portfolio demo. Swap for
+                // the non-":free" slug if this starts hitting rate limits.
+                model: 'meta-llama/llama-3.3-70b-instruct:free'
             })
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error?.message || 'Failed to fetch from Groq');
+            throw new Error(data.error?.message || 'Failed to fetch from OpenRouter');
         }
 
         return res.status(200).json(data);
     } catch (error) {
-        console.error('Groq API Error:', error);
+        console.error('OpenRouter API Error:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
