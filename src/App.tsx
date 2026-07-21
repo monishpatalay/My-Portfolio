@@ -10,6 +10,7 @@ const MainContainer = lazy(() => import("./components/MainContainer"));
 const MyWorks = lazy(() => import("./pages/MyWorks"));
 const Play = lazy(() => import("./pages/Play"));
 import { LoadingProvider } from "./context/LoadingProvider";
+import { SiteDataProvider } from "./context/SiteDataProvider";
 
 const AppFallback = () => (
   <div
@@ -23,6 +24,7 @@ const AppFallback = () => (
 const App = () => {
   return (
     <BrowserRouter>
+      <SiteDataProvider>
       <Routes>
         <Route
           path="/"
@@ -61,6 +63,7 @@ const App = () => {
           }
         />
       </Routes>
+      </SiteDataProvider>
       <Analytics />
       <SpeedInsights />
     </BrowserRouter>

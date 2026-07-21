@@ -1,6 +1,6 @@
 import { MdArrowOutward, MdCopyright } from "react-icons/md";
 import "./styles/Contact.css";
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from "react";
@@ -8,6 +8,7 @@ import { useEffect } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
+  const config = useSiteData();
   useEffect(() => {
     const contactTimeline = gsap.timeline({
       scrollTrigger: {

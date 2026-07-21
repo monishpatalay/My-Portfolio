@@ -1,7 +1,8 @@
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 import TimelineSection from "./TimelineSection";
 
 const Education = () => {
+  const config = useSiteData();
   const items = config.education.map((edu) => ({
     title: edu.degree,
     subtitle: edu.institution,

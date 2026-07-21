@@ -1,8 +1,9 @@
 import { PropsWithChildren } from "react";
 import "./styles/Landing.css";
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 
 const Landing = ({ children }: PropsWithChildren) => {
+  const config = useSiteData();
   const nameParts = config.developer.fullName.split(" ");
   const firstName = nameParts[0] || config.developer.name;
   const lastName = nameParts.slice(1).join(" ") || "";

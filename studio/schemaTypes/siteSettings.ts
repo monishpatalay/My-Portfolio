@@ -1,0 +1,96 @@
+import { defineField, defineType } from "sanity";
+
+export default defineType({
+  name: "siteSettings",
+  title: "Site Settings",
+  type: "document",
+  groups: [
+    { name: "developer", title: "Developer" },
+    { name: "social", title: "Social & Contact" },
+    { name: "about", title: "About Section" },
+  ],
+  fields: [
+    defineField({
+      name: "developerName",
+      title: "Short Name",
+      type: "string",
+      group: "developer",
+      description: 'Shown in casual spots, e.g. "Monish"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "developerFullName",
+      title: "Full Name",
+      type: "string",
+      group: "developer",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "developerTitle",
+      title: "Title / Tagline",
+      type: "string",
+      group: "developer",
+      description: 'e.g. "AI Engineer & Full-Stack Developer"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "developerDescription",
+      title: "Hero Description",
+      type: "text",
+      rows: 4,
+      group: "developer",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "githubUsername",
+      title: "GitHub Username",
+      type: "string",
+      group: "social",
+      description: 'Just the username, e.g. "monishpatalay"',
+    }),
+    defineField({
+      name: "email",
+      title: "Email",
+      type: "string",
+      group: "social",
+      validation: (rule) => rule.required().email(),
+    }),
+    defineField({
+      name: "location",
+      title: "Location",
+      type: "string",
+      group: "social",
+      description: 'e.g. "CA, USA"',
+    }),
+    defineField({
+      name: "githubUrl",
+      title: "GitHub URL",
+      type: "url",
+      group: "social",
+    }),
+    defineField({
+      name: "linkedinUrl",
+      title: "LinkedIn URL",
+      type: "url",
+      group: "social",
+    }),
+    defineField({
+      name: "aboutTitle",
+      title: "About Title",
+      type: "string",
+      group: "about",
+      initialValue: "About Me",
+    }),
+    defineField({
+      name: "aboutDescription",
+      title: "About Description",
+      type: "text",
+      rows: 6,
+      group: "about",
+      validation: (rule) => rule.required(),
+    }),
+  ],
+  preview: {
+    select: { title: "developerFullName", subtitle: "developerTitle" },
+  },
+});

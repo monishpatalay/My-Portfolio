@@ -1,7 +1,8 @@
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 import TimelineSection from "./TimelineSection";
 
 const Career = () => {
+  const config = useSiteData();
   const items = config.experiences.map((exp) => ({
     title: exp.position,
     subtitle: exp.company,

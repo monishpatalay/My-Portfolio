@@ -49,44 +49,79 @@ const Scene = () => {
       const clock = new THREE.Clock();
 
       const light = setLighting(scene);
-      const { loadCharacter } = setCharacter(renderer, scene, camera, setLoading);
+      const { loadCharacter, getDisposeTimelines } = setCharacter(renderer, scene, camera, setLoading);
 
       let onResize: (() => void) | undefined;
       let isCancelled = false;
+      let introTimeoutId: ReturnType<typeof setTimeout> | undefined;
+      // setCharTimeline/setAllTimeline run again on every resize; without
+      // tracking (and disposing) the previous run's cleanup here, each
+      // resize leaked another interval + GSAP timeline that never stopped.
+      let disposeCharTimelines: (() => void) | undefined;
 
-      loadCharacter().then((gltf) => {
-        if (isCancelled) {
-          gltf?.scene.traverse((child) => {
-            const mesh = child as THREE.Mesh;
-            if (mesh.isMesh) {
-              mesh.geometry?.dispose();
-              const materials = Array.isArray(mesh.material)
-                ? mesh.material
-                : [mesh.material];
-              materials.forEach((mat) => mat?.dispose());
-            }
-          });
-          return;
-        }
-        if (gltf) {
-          const animations = setAnimations(gltf);
-          if (hoverDivRef.current) {
-            animations.hover(gltf, hoverDivRef.current);
+      // The character load has no guaranteed upper bound (GPU shader
+      // compilation in particular can occasionally hang on certain
+      // driver/GPU combos), and nothing downstream had error handling, so
+      // any failure or stall left the loading screen stuck forever with no
+      // way out. hasCompletedLoading + the timeout guarantee the loading
+      // screen always resolves, whether or not the model itself does.
+      let hasCompletedLoading = false;
+      const markLoadingComplete = () => {
+        if (hasCompletedLoading || isCancelled) return;
+        hasCompletedLoading = true;
+        setLoading(100);
+      };
+      const loadTimeoutId = setTimeout(() => {
+        console.warn("Character model is taking too long to load; continuing without waiting.");
+        markLoadingComplete();
+      }, 20000);
+
+      loadCharacter()
+        .then((gltf) => {
+          if (isCancelled) {
+            gltf?.scene.traverse((child) => {
+              const mesh = child as THREE.Mesh;
+              if (mesh.isMesh) {
+                mesh.geometry?.dispose();
+                const materials = Array.isArray(mesh.material)
+                  ? mesh.material
+                  : [mesh.material];
+                materials.forEach((mat) => mat?.dispose());
+              }
+            });
+            return;
           }
-          mixer = animations.mixer;
-          const character = gltf.scene;
-          scene.add(character);
-          headBone = character.getObjectByName("spine006") || null;
-          screenLight = (character.getObjectByName("screenlight") as THREE.Mesh) || null;
-          setLoading(100);
-          setTimeout(() => {
-            light.turnOnLights();
-            animations.startIntro();
-          }, 2500);
-          onResize = () => handleResize(renderer, camera, canvasDiv, character);
-          window.addEventListener("resize", onResize);
-        }
-      });
+          if (gltf) {
+            const animations = setAnimations(gltf);
+            if (hoverDivRef.current) {
+              animations.hover(gltf, hoverDivRef.current);
+            }
+            mixer = animations.mixer;
+            const character = gltf.scene;
+            scene.add(character);
+            headBone = character.getObjectByName("spine006") || null;
+            screenLight = (character.getObjectByName("screenlight") as THREE.Mesh) || null;
+            introTimeoutId = setTimeout(() => {
+              if (isCancelled) return;
+              light.turnOnLights();
+              animations.startIntro();
+            }, 2500);
+            disposeCharTimelines = getDisposeTimelines();
+            onResize = () => {
+              disposeCharTimelines?.();
+              disposeCharTimelines = handleResize(renderer, camera, canvasDiv, character);
+            };
+            window.addEventListener("resize", onResize);
+          }
+          markLoadingComplete();
+        })
+        .catch((error) => {
+          console.error("Failed to load character model:", error);
+          markLoadingComplete();
+        })
+        .finally(() => {
+          clearTimeout(loadTimeoutId);
+        });
 
       let mouse = { x: 0, y: 0 },
         interpolation = { x: 0.1, y: 0.2 };
@@ -140,6 +175,9 @@ const Scene = () => {
       animate();
       return () => {
         isCancelled = true;
+        clearTimeout(loadTimeoutId);
+        clearTimeout(introTimeoutId);
+        disposeCharTimelines?.();
         cancelAnimationFrame(animationFrameId);
         clearTimeout(debounce);
         scene.clear();

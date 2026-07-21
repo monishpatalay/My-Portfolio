@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 import "./styles/CallToAction.css";
 
 const CallToAction = () => {
+  const config = useSiteData();
   return (
     <div className="cta-section">
       <div className="cta-buttons">

@@ -6,7 +6,7 @@ export function setCharTimeline(
   camera: THREE.PerspectiveCamera
 ) {
   let intensity: number = 0;
-  setInterval(() => {
+  const intervalId = setInterval(() => {
     intensity = Math.random();
   }, 200);
   const tl1 = gsap.timeline({
@@ -38,6 +38,7 @@ export function setCharTimeline(
   });
   let screenLight: THREE.Mesh | undefined;
   let monitor: THREE.Mesh | undefined;
+  let emissiveTl: gsap.core.Timeline | undefined;
   character?.children.forEach((object) => {
     if (object.name === "Plane004") {
       object.children.forEach((child) => {
@@ -57,7 +58,7 @@ export function setCharTimeline(
       material.transparent = true;
       material.opacity = 0;
       material.emissive.set("#C8BFFF");
-      gsap.timeline({ repeat: -1, repeatRefresh: true }).to(material, {
+      emissiveTl = gsap.timeline({ repeat: -1, repeatRefresh: true }).to(material, {
         emissiveIntensity: () => intensity * 8,
         duration: () => Math.random() * 0.6,
         delay: () => Math.random() * 0.1,
@@ -65,6 +66,7 @@ export function setCharTimeline(
       screenLight = mesh;
     }
   });
+  let tM2: gsap.core.Timeline | undefined;
   const neckBone = character?.getObjectByName("spine005");
   if (window.innerWidth > 1024) {
     if (character) {
@@ -125,7 +127,7 @@ export function setCharTimeline(
     }
   } else {
     if (character) {
-      const tM2 = gsap.timeline({
+      tM2 = gsap.timeline({
         scrollTrigger: {
           trigger: ".what-box-in",
           start: "top 70%",
@@ -135,10 +137,24 @@ export function setCharTimeline(
       tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
     }
   }
+
+  // setInterval + the infinite-repeat emissive tween never stopped on their
+  // own, and this function is called again on every window resize (see
+  // resizeUtils.ts) as well as on initial load — without cleanup, each call
+  // left another interval and timeline running forever, fighting over the
+  // same screenlight material and compounding into visible stutter/freeze.
+  return () => {
+    clearInterval(intervalId);
+    [tl1, tl2, tl3, tM2, emissiveTl].forEach((tl) => {
+      tl?.scrollTrigger?.kill();
+      tl?.kill();
+    });
+  };
 }
 
 export function setAllTimeline() {
   const sections = gsap.utils.toArray<HTMLElement>(".career-section");
+  const timelines: gsap.core.Timeline[] = [];
 
   sections.forEach((section) => {
     const timelineEl = section.querySelectorAll(".career-timeline");
@@ -154,6 +170,7 @@ export function setAllTimeline() {
         invalidateOnRefresh: true,
       },
     });
+    timelines.push(careerTimeline);
     careerTimeline
       .fromTo(
         timelineEl,
@@ -196,4 +213,11 @@ export function setAllTimeline() {
       );
     }
   });
+
+  return () => {
+    timelines.forEach((tl) => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    });
+  };
 }

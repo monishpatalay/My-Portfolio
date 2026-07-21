@@ -88,6 +88,10 @@
   margin: 0;
 }
 
+.work-title h4 {
+  color: #e0b355;
+}
+
 .work-info p {
   font-weight: 200;
   color: #adacac;
@@ -97,6 +101,7 @@
 
 .work-info>p {
   width: 90%;
+  color: #e0b355;
 }
 
 .work-image {
@@ -147,12 +152,12 @@
 
 .work-image img {
   max-width: 100%;
-  max-height: 350px;
+  max-height: 420px;
 }
 
 @media only screen and (max-height: 900px) {
   .work-image img {
-    max-height: 250px;
+    max-height: 300px;
   }
 
   .work-box {
@@ -209,7 +214,7 @@
 
 @media only screen and (max-height: 650px) {
   .work-image img {
-    max-height: 200px;
+    max-height: 230px;
   }
 
   .work-section h2 {
@@ -334,7 +339,7 @@
   }
 
   .work-image img {
-    max-height: 200px;
+    max-height: 260px;
   }
 
   .work-box-cta {
@@ -349,4 +354,31 @@
   .see-all-works p {
     font-size: 14px;
   }
+}
+
+.work-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.work-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(234, 229, 236, 0.9);
+  background: rgba(194, 164, 255, 0.08);
+  border: 1px solid rgba(194, 164, 255, 0.4);
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.work-link-btn:hover {
+  background: var(--accentColor);
+  border-color: var(--accentColor);
+  color: #0b080c;
 }

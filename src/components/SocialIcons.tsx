@@ -3,9 +3,10 @@ import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
 import { useEffect } from "react";
 import HoverLinks from "./HoverLinks";
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 
 const SocialIcons = () => {
+  const config = useSiteData();
   useEffect(() => {
     const social = document.getElementById("social") as HTMLElement;
 

@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
-import { config } from "../config";
+import { FaGithub } from "react-icons/fa6";
+import { MdArrowOutward } from "react-icons/md";
+import { useSiteData } from "../context/SiteDataProvider";
 import "./MyWorks.css";
 
 const MyWorks = () => {
+  const config = useSiteData();
   return (
     <div className="myworks-page">
       <div className="myworks-header">
@@ -27,6 +30,32 @@ const MyWorks = () => {
               <p className="myworks-card-category">{project.category}</p>
               <p className="myworks-card-description">{project.description}</p>
               <p className="myworks-card-tech">{project.technologies}</p>
+              {(project.githubUrl || project.liveUrl) && (
+                <div className="myworks-card-links">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="myworks-link-btn"
+                      data-cursor="disable"
+                    >
+                      <FaGithub /> Code
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="myworks-link-btn"
+                      data-cursor="disable"
+                    >
+                      <MdArrowOutward /> Live
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         ))}

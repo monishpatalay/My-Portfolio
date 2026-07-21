@@ -10,6 +10,10 @@ async function generateAESKey(password: string): Promise<CryptoKey> {
   );
 }
 
+// The caller passes a password hardcoded in the client bundle (see
+// character.ts), so this only obfuscates the .glb against casual
+// right-click-save/network-tab inspection — anyone who reads the shipped JS
+// has the password too. Not a real access control; don't rely on it as one.
 export const decryptFile = async (
   url: string,
   password: string

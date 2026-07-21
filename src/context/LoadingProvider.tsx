@@ -13,11 +13,20 @@ interface LoadingType {
   setLoading: (percent: number) => void;
 }
 
-export const LoadingContext = createContext<LoadingType | null>(null);
+const LoadingContext = createContext<LoadingType | null>(null);
+
+// Module-scoped: survives SPA navigation (route unmount/remount) but resets
+// on a real page reload, so the intro loader only plays on first open.
+let hasCompletedIntro = false;
+
+export function markIntroComplete() {
+  hasCompletedIntro = true;
+}
 
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(() => {
-    // Skip loading on mobile
+    // Skip loading on mobile, or if the intro already played this session
+    if (hasCompletedIntro) return false;
     if (window.innerWidth <= 768) return false;
     return true;
   });
@@ -29,16 +38,20 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
     setLoading,
   };
   useEffect(() => {
-    // Auto-start animations on mobile since there's no 3D model
-    if (window.innerWidth <= 768) {
-      import("../components/utils/initialFX").then((module) => {
-        if (module.initialFX) {
-          setTimeout(() => {
-            module.initialFX();
-          }, 100);
-        }
-      });
-    }
+    // isLoading is read from its initial value here (mount-only effect):
+    // covers mobile (no 3D model) and returning to "/" after the intro
+    // already completed once. The full desktop intro path calls
+    // initialFX/markIntroComplete itself from Loading.tsx instead.
+    if (isLoading) return;
+    markIntroComplete();
+    import("../components/utils/initialFX").then((module) => {
+      if (module.initialFX) {
+        setTimeout(() => {
+          module.initialFX();
+        }, 100);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

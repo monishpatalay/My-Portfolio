@@ -14,6 +14,8 @@ const setCharacter = (
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
 
+  let disposeTimelines: (() => void) | undefined;
+
   const loadCharacter = async (): Promise<GLTF | null> => {
     try {
       onProgress?.(10);
@@ -45,8 +47,12 @@ const setCharacter = (
               }
             });
             resolve(gltf);
-            setCharTimeline(character, camera);
-            setAllTimeline();
+            const charCleanup = setCharTimeline(character, camera);
+            const allCleanup = setAllTimeline();
+            disposeTimelines = () => {
+              charCleanup();
+              allCleanup();
+            };
             character!.getObjectByName("footR")!.position.y = 3.36;
             character!.getObjectByName("footL")!.position.y = 3.36;
             dracoLoader.dispose();
@@ -64,7 +70,7 @@ const setCharacter = (
     }
   };
 
-  return { loadCharacter };
+  return { loadCharacter, getDisposeTimelines: () => disposeTimelines };
 };
 
 export default setCharacter;

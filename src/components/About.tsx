@@ -1,7 +1,8 @@
 import "./styles/About.css";
-import { config } from "../config";
+import { useSiteData } from "../context/SiteDataProvider";
 
 const About = () => {
+  const config = useSiteData();
   return (
     <div className="about-section" id="about">
       <div className="about-me">
