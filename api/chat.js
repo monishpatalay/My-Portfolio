@@ -102,9 +102,10 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 messages,
-                // Free tier: fine for a low-traffic portfolio demo. Swap for
-                // the non-":free" slug if this starts hitting rate limits.
-                model: 'meta-llama/llama-3.3-70b-instruct:free'
+                // OpenRouter discontinued the free tier for this model
+                // (":free" now 404s), so this is metered per-token on
+                // whatever OpenRouter credits/billing is set up.
+                model: 'meta-llama/llama-3.3-70b-instruct'
             })
         });
 
