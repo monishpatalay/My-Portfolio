@@ -53,3 +53,7 @@ tests/e2e/tests/
 # Scratch + local pnpm store
 .snap.txt
 .pnpm-store/
+
+# Sanity CLI build output
+dist/
+.sanity/

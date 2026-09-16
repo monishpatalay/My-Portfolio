@@ -1,1 +1,0 @@
-import{r as e}from"./rolldown-runtime-hePW80VL.js";import{v as t}from"./_singletons-DFxG6Zxv.js";import{n}from"./jsx-runtime-DE3RlOCf.js";var r=e(n(),1);function i(){return(0,r.useContext)(t)}export{i as t};
