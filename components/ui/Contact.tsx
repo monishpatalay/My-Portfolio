@@ -1,0 +1,6 @@
+'use client';
+import {useState} from 'react';
+import {LocalTime} from './Footer';
+import type {settings} from '@/lib/content/data';
+import {newTabProps} from '@/lib/links';
+export default function Contact({profile}:{profile:typeof settings}){const [label,setLabel]=useState('Copy email');return <section id="contact" className="chapter contact" data-shape="envelope" aria-labelledby="contact-title"><div className="section-kicker"><span className="status-dot"/> The next good thing starts with a conversation</div><h2 id="contact-title">Let’s build<br/>something<span className="name-period">.</span></h2><div className="contact-email"><a href={`mailto:${profile.email}`}>{profile.email}</a><button className="button secondary" aria-live="polite" onClick={async()=>{try{await navigator.clipboard.writeText(profile.email);setLabel('Copied ✓');}catch{setLabel('Select email to copy');}}}>{label}</button></div><div className="contact-bottom"><div className="socials"><a href={profile.github} {...newTabProps(profile.github)}>GitHub ↗</a><a href={profile.linkedin} {...newTabProps(profile.linkedin)}>LinkedIn ↗</a><a href="/resume" {...newTabProps('/resume')}>Résumé ↗</a></div><LocalTime/></div></section>;}

@@ -1,0 +1,28 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--d-lg) var(--d-xl);
+}
+
+.wordmark {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--d-md);
+}
+
+@media (max-width: 767px) {
+  .nav {
+    padding: var(--d-md);
+  }
+}

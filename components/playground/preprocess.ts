@@ -1,0 +1,6 @@
+export function preprocess(canvas:HTMLCanvasElement):Float32Array {
+ const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas unavailable');const {width:w,height:h}=canvas;const data=ctx.getImageData(0,0,w,h).data;let left=w,right=-1,top=h,bottom=-1;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(data[(y*w+x)*4]>25){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+ if(right<left)return new Float32Array(784);
+ const small=document.createElement('canvas');small.width=28;small.height=28;const out=small.getContext('2d')!;out.fillStyle='black';out.fillRect(0,0,28,28);const width=right-left+1,height=bottom-top+1,scale=20/Math.max(width,height);out.drawImage(canvas,left,top,width,height,(28-width*scale)/2,(28-height*scale)/2,width*scale,height*scale);const pixels=out.getImageData(0,0,28,28).data;let mass=0,cx=0,cy=0;for(let i=0;i<784;i++){const value=pixels[i*4]/255;mass+=value;cx+=(i%28)*value;cy+=Math.floor(i/28)*value;}const result=new Float32Array(784);if(!mass)return result;const dx=Math.round(13.5-cx/mass),dy=Math.round(13.5-cy/mass);for(let y=0;y<28;y++)for(let x=0;x<28;x++){const ox=x-dx,oy=y-dy;if(ox>=0&&ox<28&&oy>=0&&oy<28)result[y*28+x]=pixels[(oy*28+ox)*4]/255;}return result;
+}

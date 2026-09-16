@@ -1,0 +1,3 @@
+import {isValidSignature,SIGNATURE_HEADER_NAME} from '@sanity/webhook';
+import {revalidateTag,revalidatePath} from 'next/cache';
+export async function POST(request:Request){const secret=process.env.SANITY_REVALIDATE_SECRET;if(!secret)return Response.json({code:'unconfigured'},{status:503});const body=await request.text();if(body.length>65536)return new Response(null,{status:413});const signature=request.headers.get(SIGNATURE_HEADER_NAME);if(!signature||!await isValidSignature(body,signature,secret))return new Response(null,{status:401});revalidateTag('content','max');revalidatePath('/','layout');return Response.json({revalidated:true});}

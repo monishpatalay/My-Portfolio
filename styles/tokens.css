@@ -1,0 +1,208 @@
+/*
+ * Design tokens — Portfolio v2 (PRD §12.2–12.5).
+ * One source of truth in CSS custom properties. lib/motion/tokens.ts mirrors
+ * the motion values so GSAP/Motion/WebGL never disagree with CSS by a frame.
+ */
+
+:root {
+  /* ---- §12.2 Colour — dark chapters are the default; light chapters are
+     applied per-chapter via [data-chapter-theme="light"] (§14.3 ChapterTrigger). */
+  --bg: #0b080c;
+  --surface: #141118;
+  --surface-2: #1d1a22;
+  --text: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --hairline: rgba(255, 255, 255, 0.12);
+  --accent: #7c6cff;
+  --accent-soft: #c2a4ff;
+  --gradient-signature: linear-gradient(90deg, #7c6cff, #3dd6f5);
+
+  /* Semantic surfaces and text. Everything in globals.css points at these so a
+     theme switch flips the whole page, rather than only the handful of places
+     that happened to already use a token. */
+  --bg-deep: #070509;
+  --surface-3: #17131d;
+  --surface-raised: #17101f;
+  --glass: rgba(20, 17, 24, 0.88);
+  --glass-soft: rgba(255, 255, 255, 0.025);
+  --scrim: color-mix(in srgb, var(--bg) 91%, transparent);
+  --scrim-strong: color-mix(in srgb, var(--bg) 95%, transparent);
+  --text-muted: #b1a7bc;
+  --text-faint: #8e849c;
+  --on-accent: #17101f;
+  --hairline-strong: rgba(255, 255, 255, 0.2);
+  --tint-warm: #eeedf4;
+  --tint-warm-text: #211c28;
+  --tint-card: #e0d9ee;
+  --tint-card-alt: #d9e5e6;
+  --shadow-panel: 0 25px 100px rgba(0, 0, 0, 0.6);
+  --chapter-hue: 252; /* tweened by ChapterTrigger; the particle uniform reads this too */
+
+  /* ---- §12.3 Typography */
+  --font-display: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --text-hero: clamp(3.5rem, 1rem + 9vw, 9rem);
+  --text-display: clamp(2.5rem, 1rem + 5vw, 5rem);
+  --text-headline: clamp(1.75rem, 1rem + 2.5vw, 3rem);
+  --text-intro: clamp(1.1875rem, 1rem + 0.6vw, 1.5rem);
+  --text-body: 1.0625rem;
+  --text-caption: 0.875rem;
+
+  /* ---- §12.4 Space, shape, material */
+  --unit: 4px;
+  --space-chapter: clamp(6rem, 3rem + 10vw, 14rem);
+  --width-text: 680px;
+  --width-content: 1080px;
+  --width-media: 1440px;
+  --radius-card: 28px;
+  --radius-media: 20px;
+  --radius-pill: 999px;
+  --glass-bg: color-mix(in srgb, var(--bg) 72%, transparent);
+  --grain-opacity: 0.07;
+
+  /* ---- §12.5 Motion — duration scale (base + the §13-derived add-list) */
+  --dur-instant: 80ms;
+  --dur-micro: 120ms;
+  --dur-fast: 180ms;
+  --dur-base: 240ms;
+  --dur-mid: 350ms;
+  --dur-slow: 600ms;
+  --dur-reveal: 900ms;
+  --dur-cine: 1400ms;
+  --dur-epic: 1800ms;
+  --dur-exit-ratio: 0.7;
+  /* Base scale named in §12.5; add-list entries are added as §13 rows are built. */
+  --dur-100: 100ms;
+  --dur-140: 140ms;
+  --dur-150: 150ms;
+  --dur-200: 200ms;
+  --dur-210: 210ms;
+  --dur-220: 220ms;
+  --dur-250: 250ms;
+  --dur-300: 300ms;
+  --dur-320: 320ms;
+  --dur-360: 360ms;
+  --dur-380: 380ms;
+  --dur-400: 400ms;
+  --dur-420: 420ms;
+  --dur-450: 450ms;
+  --dur-500: 500ms;
+  --dur-700: 700ms;
+  --dur-800: 800ms;
+  --dur-1000: 1000ms;
+  --dur-1100: 1100ms;
+  --dur-1200: 1200ms;
+  --dur-1600: 1600ms;
+  --dur-2800: 2800ms;
+
+  /* Loop/ambient periods (seconds) — a parallel scale, not transition durations. */
+  --loop-045: 0.45s;
+  --loop-09: 0.9s;
+  --loop-12: 1.2s;
+  --loop-15: 1.5s;
+  --loop-16: 1.6s;
+  --loop-2: 2s;
+  --loop-24: 2.4s;
+  --loop-25: 2.5s;
+  --loop-26: 2.6s;
+  --loop-3: 3s;
+  --loop-4: 4s;
+  --loop-5: 5s;
+  --loop-6: 6s;
+  --loop-8: 8s;
+  --loop-30: 30s;
+  --loop-60: 60s;
+
+  /* Eases — GSAP receives the same curves through CustomEase (lib/motion/tokens.ts) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-cine: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-amb: cubic-bezier(0.37, 0, 0.63, 1);
+
+  /* Scalars */
+  --d-xs: 4px;
+  --d-sm: 8px;
+  --d-md: 16px;
+  --d-lg: 24px;
+  --d-xl: 48px;
+  --d-mask: 110%;
+  --scale-press: 0.97;
+  --scale-subtle: 0.98;
+  --scale-pop: 1.04;
+  --scale-card: 1.06;
+  --stagger-char: 0.018s;
+  --stagger-word: 0.04s;
+  --stagger-line: 0.08s;
+  --stagger-item: 0.05s;
+  --stagger-card: 0.08s;
+  --focus-ring: 2px;
+  --focus-offset: 3px;
+
+  /* Runtime scalars — written by lib/motion/governor.ts, read everywhere else. */
+  --motion-scale: 1;
+  --parallax-scale: 1;
+}
+
+/* ---- Light theme. Stamped on <html> by the pre-paint script in app/layout.tsx
+   from the visitor's saved choice, falling back to prefers-color-scheme.
+   Only the palette is redefined; every layout rule is shared. --accent-soft is
+   darkened here because the dark-mode lilac fails contrast on white. */
+:root[data-theme="light"] {
+  --bg: #fbfbfd;
+  --bg-deep: #eeeef2;
+  --surface: #ffffff;
+  --surface-2: #f2f2f5;
+  --surface-3: #ffffff;
+  --surface-raised: #ffffff;
+  --glass: rgba(255, 255, 255, 0.86);
+  --glass-soft: rgba(0, 0, 0, 0.02);
+  --text: #1d1d1f;
+  --text-secondary: #55555c;
+  --text-muted: #5f5f68;
+  --text-faint: #7a7a82;
+  --on-accent: #ffffff;
+  --hairline: rgba(0, 0, 0, 0.12);
+  --hairline-strong: rgba(0, 0, 0, 0.22);
+  --accent: #5a47e0;
+  --accent-soft: #6244cf;
+  --tint-warm: #f1f0f6;
+  --tint-warm-text: #211c28;
+  --tint-card: #e7e1f4;
+  --tint-card-alt: #dfeaeb;
+  --shadow-panel: 0 25px 80px rgba(20, 16, 30, 0.18);
+  --grain-opacity: 0.035;
+  color-scheme: light;
+}
+
+/* ---- §12.2 Light-chapter overrides. Applied by ChapterTrigger via
+   [data-chapter-theme="light"] on the chapter's own section element — never
+   the document root, since dark and light chapters alternate on one page. */
+[data-chapter-theme="light"] {
+  --bg: #fbfbfd;
+  --surface: #ffffff;
+  --surface-2: #f2f2f5;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --hairline: rgba(0, 0, 0, 0.1);
+  --accent: #5a47e0;
+  --accent-soft: #8b6fe8;
+  --grain-opacity: 0.045;
+}
+
+/* ---- §14.4 Motion modes: Full and Calm. The inline pre-paint script in
+   app/layout.tsx stamps data-motion before first render; this is the only
+   place --motion-scale / --parallax-scale are forced to 0. */
+[data-motion="calm"] {
+  --motion-scale: 0;
+  --parallax-scale: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) {
+    --motion-scale: 0;
+    --parallax-scale: 0;
+  }
+}

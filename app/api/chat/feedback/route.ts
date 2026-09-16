@@ -1,0 +1,3 @@
+import {feedbackSchema} from '@/lib/chat/schema';
+import {guard,redisClient} from '@/lib/chat/server';
+export async function POST(request:Request){try{const denied=await guard(request);if(denied)return denied;const input=feedbackSchema.safeParse(await request.json());if(!input.success)return Response.json({code:'invalid_input'},{status:400});const redis=redisClient(),key=`portfolio:question:${input.data.id}`;const record=await redis.get<Record<string,unknown>>(key);if(!record)return Response.json({code:'not_found'},{status:404});await redis.set(key,{...record,rating:input.data.rating},{keepTtl:true,xx:true});return Response.json({ok:true});}catch{return Response.json({code:'unavailable'},{status:503});}}

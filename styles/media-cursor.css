@@ -1,0 +1,39 @@
+/* Project artwork uses the native 1920x1080 frame everywhere. */
+.project-media,
+.list-view .project-media,
+.case-hero .project-media {
+  aspect-ratio: 16 / 9;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* Let the browser own position and visibility across windows and monitors. */
+  .portfolio-shell {
+    --portfolio-cursor: url('/cursor.svg') 5 4, auto;
+    --portfolio-link-cursor: url('/cursor.svg') 5 4, pointer;
+    cursor: var(--portfolio-cursor);
+  }
+
+  .portfolio-shell :is(input, textarea, [contenteditable='true'], [contenteditable='']) {
+    cursor: text;
+  }
+
+  .portfolio-shell :is(a, button, details, summary, select, [role='button'], [type='checkbox'], [type='radio']) {
+    cursor: var(--portfolio-link-cursor);
+  }
+
+  .portfolio-shell :is(:disabled, [aria-disabled='true']) {
+    cursor: not-allowed;
+  }
+
+  html[data-motion='calm'] .portfolio-shell {
+    --portfolio-cursor: auto;
+    --portfolio-link-cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:not([data-motion='full']) .portfolio-shell {
+      --portfolio-cursor: auto;
+      --portfolio-link-cursor: pointer;
+    }
+  }
+}

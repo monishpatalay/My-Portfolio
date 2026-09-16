@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound(){return <main id="main" className="page-shell error-page"><p className="section-kicker">A small detour in the universe.</p><h1>404</h1><h2>This page wandered off.</h2><p>There are still good things to explore.</p><div className="hero-actions"><Link className="button primary" href="/">Home</Link><Link className="button secondary" href="/work">Work</Link><Link className="button secondary" href="/playground">Playground</Link></div></main>;}

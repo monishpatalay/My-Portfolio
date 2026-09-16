@@ -1,0 +1,73 @@
+.toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--d-sm);
+  padding: var(--d-xs) var(--d-md);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+  background: var(--glass-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  transition: color var(--dur-fast) var(--ease-std), border-color var(--dur-fast) var(--ease-std),
+    transform var(--dur-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .toggle:hover {
+    color: var(--text);
+    border-color: var(--accent-soft);
+    /* --motion-scale is 0 in Calm, so the lift disappears with everything else. */
+    transform: translateY(calc(-2px * var(--motion-scale)));
+  }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform var(--dur-fast) var(--ease-std), opacity var(--dur-fast) var(--ease-std);
+}
+
+.toggle[aria-pressed="true"] .dot {
+  opacity: 0.4;
+  transform: scale(0.8);
+}
+
+/* Hover/focus hint. Opacity only — no transform — so it reads identically in
+   Calm mode, where --motion-scale zeroes movement. aria-hidden because the
+   button's aria-label already tells a screen reader the same thing. */
+.tip {
+  position: absolute;
+  top: calc(100% + var(--d-sm));
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: var(--d-sm) var(--d-md);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 50;
+  transition: opacity var(--dur-fast) var(--ease-std);
+}
+
+/* Guarded so a tap on a touch device does not leave the hint stuck open. */
+@media (hover: hover) {
+  .toggle:hover .tip {
+    opacity: 1;
+  }
+}
+
+.toggle:focus-visible .tip {
+  opacity: 1;
+}

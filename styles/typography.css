@@ -1,0 +1,73 @@
+/*
+ * Typography — Portfolio v2 (PRD §12.3).
+ * Text craft rules: text-wrap: balance on headings, text-wrap: pretty on
+ * short body copy, antialiased smoothing at the root. Fonts are wired
+ * through next/font in app/layout.tsx (self-hosted, font-display: swap).
+ */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  color: var(--text);
+  font-feature-settings: "ss01" 1, "cv11" 1;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.text-hero {
+  font-size: var(--text-hero);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.text-display {
+  font-size: var(--text-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.text-headline {
+  font-size: var(--text-headline);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.text-intro {
+  font-size: var(--text-intro);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.text-caption {
+  font-size: var(--text-caption);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+code,
+.font-mono {
+  font-family: var(--font-mono);
+}

@@ -1,0 +1,31 @@
+{
+  "architecture": [
+    784,
+    128,
+    64,
+    10
+  ],
+  "layers": [
+    {
+      "input": 784,
+      "output": 128,
+      "scale": 0.004910243675112724
+    },
+    {
+      "input": 128,
+      "output": 64,
+      "scale": 0.005656190682202578
+    },
+    {
+      "input": 64,
+      "output": 10,
+      "scale": 0.006671490613371134
+    }
+  ],
+  "bytes": 109386,
+  "testAccuracy": 0.9756,
+  "seed": 42,
+  "dataset": "MNIST",
+  "training": "scikit-learn MLPClassifier; 18 epochs max; early stopping",
+  "provenance": "Trained locally by the portfolio build script; not a claim of owner-authored training."
+}

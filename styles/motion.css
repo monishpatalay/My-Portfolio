@@ -1,0 +1,49 @@
+/*
+ * Global motion primitives — Portfolio v2 (PRD §12.4 grain, §13 ambient).
+ * Compositor-only properties throughout (transform/opacity/clip-path), per
+ * §13.1 and §15.4. Everything here is scaled by --motion-scale so Calm mode
+ * (§14.4) turns it off through the cascade, with no JS branch needed.
+ */
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  animation: grain-drift var(--loop-8) steps(8) infinite;
+}
+
+[data-motion="calm"] .grain {
+  animation: none;
+}
+
+@keyframes grain-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-25%, -25%);
+  }
+}
+
+/* Reveal primitive base state — components/motion/Reveal.tsx sets these
+   custom properties per variant; useGSAP drives them to their resting
+   values on enter. Kept as CSS custom properties (not classes toggling
+   full rule sets) so a fast scroll or resize mid-animation just retargets. */
+.reveal {
+  --ty: 0px;
+  --op: 1;
+  --bl: 0px;
+  opacity: var(--op);
+  filter: blur(calc(var(--bl) * var(--motion-scale)));
+  transform: translateY(calc(var(--ty) * var(--motion-scale)));
+}
+
+.focus-ring:focus-visible {
+  outline: var(--focus-ring) solid var(--accent);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--d-sm);
+}
