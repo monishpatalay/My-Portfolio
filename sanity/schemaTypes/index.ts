@@ -216,4 +216,47 @@ const stat = defineType({
   preview: {select: {title: 'value', subtitle: 'label'}},
 });
 
-export const schemaTypes = [project, experience, education, skillCategory, stat];
+const chatFaq = defineType({
+  name: 'chatFaq',
+  title: 'Chat answer',
+  type: 'document',
+  description:
+    'A curated answer the AI assistant uses when a visitor asks something close to this question. Edit these to change how the assistant replies, without touching code.',
+  fields: [
+    defineField({
+      name: 'question',
+      type: 'string',
+      description: 'The question as a visitor would phrase it.',
+      validation: rule => rule.required(),
+    }),
+    defineField({
+      name: 'answer',
+      type: 'text',
+      rows: 6,
+      description: 'Plain prose. The assistant may shorten it, but will not contradict it.',
+      validation: rule => rule.required(),
+    }),
+    orderField,
+  ],
+  preview: {select: {title: 'question', subtitle: 'answer'}},
+});
+
+const achievement = defineType({
+  name: 'achievement',
+  title: 'Achievement',
+  type: 'document',
+  description: 'Publications, awards, leadership and milestones. Shown under the timeline and given to the assistant.',
+  fields: [
+    defineField({name: 'title', type: 'string', validation: rule => rule.required()}),
+    defineField({name: 'detail', type: 'string', description: 'One short supporting line.'}),
+    defineField({
+      name: 'kind',
+      type: 'string',
+      options: {list: ['Publication', 'Leadership', 'Competition', 'Academics', 'Problem solving']},
+    }),
+    orderField,
+  ],
+  preview: {select: {title: 'title', subtitle: 'kind'}},
+});
+
+export const schemaTypes = [project, experience, education, skillCategory, stat, achievement, chatFaq];

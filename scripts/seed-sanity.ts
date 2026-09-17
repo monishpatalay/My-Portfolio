@@ -17,7 +17,7 @@
 import {randomUUID} from 'node:crypto';
 // via next-sanity: @sanity/client is a transitive dep and pnpm keeps it unhoisted.
 import {createClient} from 'next-sanity';
-import {projects, stats, journey, education, skillGroups} from '../lib/content/data';
+import {projects, stats, journey, education, skillGroups, achievements, chatFaqs} from '../lib/content/data';
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production';
@@ -89,6 +89,14 @@ education.forEach((entry, index) => {
 
 Object.entries(skillGroups).forEach(([title, tools], index) => {
   docs.push({_id: `skill-category-${slugify(title)}`, _type: 'skillCategory', title, tools, order: index});
+});
+
+achievements.forEach((item, index) => {
+  docs.push({_id: `achievement-${slugify(item.title)}`, _type: 'achievement', ...item, order: index});
+});
+
+chatFaqs.forEach((faq, index) => {
+  docs.push({_id: `chat-faq-${index}`, _type: 'chatFaq', ...faq, order: index});
 });
 
 stats.forEach((stat, index) => {

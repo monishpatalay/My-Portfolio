@@ -3,6 +3,7 @@ export const settings = {
   roleLines: ['AI Engineer', 'Full-Stack Developer', 'Builds and ships end to end'],
   eyebrow: 'M.S. Computer Science · Cal State LA · Aug 2024 – May 2026',
   statement: 'I like the space where a good idea becomes something you can actually use. I build across the stack—from the model and the API to the last interaction on the screen. Thoughtful engineering. Useful AI. Things that work.',
+  phone: '+1 (626) 692-4003',
   resumeUrl: 'https://resume.monishpatalay.dev', github: 'https://github.com/monishpatalay', linkedin: 'https://www.linkedin.com/in/monish-patalay/',
   availability: { status: 'hidden', text: '' },
   suggestedPrompts: ['What has Monish built with AI?', 'What is his strongest project?', 'Which technologies does he use?', 'What did he do at DRDO?'],
@@ -38,3 +39,28 @@ export const skillGroups = {
  'AI & machine learning':['LLM APIs','RAG','Vector DBs','LangGraph','LangChain','MCP','Structured outputs','Evals','TensorFlow','PyTorch','scikit-learn','Hugging Face','MLflow'],
  'Cloud & data':['AWS','GCP','Docker','PostgreSQL','MongoDB','Redis','GitHub Actions','pytest'],
 };
+
+// Achievements shown in the journey chapter and given to the assistant, so the
+// page and the chatbot never disagree about what is claimed.
+export const achievements = [
+ {title:'Published “Pose Estimation using MediaPipe”', detail:'Research paper in IJSREM.', kind:'Publication'},
+ {title:'Founder, ICPC Club at CMREC', detail:'Started and ran the competitive-programming club.', kind:'Leadership'},
+ {title:'Hackathon finalist', detail:'Reached the final round.', kind:'Competition'},
+ {title:'Graduated with honors, M.S.', detail:'3.9 / 4.0 GPA at Cal State LA.', kind:'Academics'},
+ {title:'700+ DSA problems solved', detail:'Across platforms including LeetCode.', kind:'Problem solving'},
+];
+
+// Curated answers the assistant should prefer over paraphrasing the raw content.
+// Editable in Studio as "Chat answer" documents.
+export const chatFaqs = [
+ {question:'What skills does Monish have?', answer:'Languages: Python, TypeScript, JavaScript, Java, SQL. Frontend & backend: React, Next.js, Node.js, Express.js, FastAPI, REST APIs, microservices. AI & machine learning: LLM APIs (Claude, OpenAI, Gemini, Bedrock), RAG, vector DBs, LangGraph, LangChain, MCP, function calling, PyTorch, scikit-learn, Hugging Face, MLflow. Cloud & DevOps: AWS, GCP, Docker, PostgreSQL, MongoDB, Redis, GitHub Actions, pytest.'},
+ {question:'Does Monish know JavaScript or Next.js?', answer:'Yes, he is proficient in both and uses them across full-stack projects, frontend architectures, REST API microservices and workflow automations.'},
+ {question:'What is Monish\'s email and phone number?', answer:'Email: officialmonishh@gmail.com. Phone: +1 (626) 692-4003.'},
+ {question:'Where is Monish located or based?', answer:'He is based in California, USA, in the Los Angeles area.'},
+ {question:'What achievements and publications does Monish have?', answer:'Published “Pose Estimation using MediaPipe” in IJSREM; founder of the ICPC Club at CMREC; hackathon finalist; graduated with honors in his Master\'s with a 3.9/4.0 GPA at Cal State LA; solved over 700 data structures and algorithms problems.'},
+ {question:'How many DSA questions has Monish solved?', answer:'Over 700 data structures and algorithms problems across platforms including LeetCode. He has also mentored 300+ students in DSA across C++, Python and Java.'},
+ {question:'Where can I find Monish\'s LinkedIn profile?', answer:'His LinkedIn is linked from the contact section of this site: https://www.linkedin.com/in/monish-patalay/'},
+ {question:'Where can I find the links and code for his projects?', answer:'Every project has a case study on this site with links to its source and live demo where available, and the code is on his GitHub: https://github.com/monishpatalay'},
+ {question:'Tell me about the Airbnc project.', answer:'Airbnc is a full-stack MERN booking platform with JWT authentication, Multer image uploads and complete reservation workflows. He built 15+ reusable React components, managed state with the Context API, and wrote CRUD REST APIs on Express and MongoDB.'},
+ {question:'What is Monish\'s educational background and GPA?', answer:'He is completing an M.S. in Computer Science at California State University, Los Angeles (Aug 2024 – May 2026) with a 3.9/4.0 GPA, graduating with honors. He holds a B.Tech in Artificial Intelligence and Machine Learning from CMR Engineering College.'},
+];

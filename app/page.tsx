@@ -25,6 +25,10 @@ export default async function Home() {
     <section id="journey" className="chapter timeline-chapter" data-shape="helix" aria-label="Career and education">
       <Timeline eyebrow="The path so far" title="My career & experience" entries={data.journey} />
       <Timeline eyebrow="The foundation" title="My education & background" entries={data.education} />
+      {data.achievements.length > 0 && <div className="achievements">
+        <p className="section-kicker">Along the way</p>
+        <ul>{data.achievements.map(item => <li key={item.title}><strong>{item.title}</strong>{item.detail && <span>{item.detail}</span>}{item.kind && <em>{item.kind}</em>}</li>)}</ul>
+      </div>}
     </section>
     <section id="skills" className="chapter light-chapter skills-section" data-chapter-theme="light" data-shape="sphere" aria-labelledby="skills-title">
       <div className="section-kicker">The tools change. The curiosity stays.</div><h2 id="skills-title">A stack for making<br/>things happen.</h2><Skills groups={data.skillGroups}/><p className="learning-note">Exploring deeper: agentic AI systems, production LLM applications, and system design.</p>
