@@ -11,6 +11,7 @@ const entrySchema=z.object({role:z.string(),organization:z.string(),period:z.str
 const categorySchema=z.object({title:z.string(),tools:z.array(z.string()).default([])});
 const achievementSchema=z.object({title:z.string(),detail:z.string().default(''),kind:z.string().default('')});
 const faqSchema=z.object({question:z.string(),answer:z.string()});
+const aboutSchema=z.object({heading:z.string().min(1),statement:z.string().min(1),note:z.string().optional()});
 export type Entry=z.infer<typeof entrySchema>;
 
 // GROQ returns an explicit null for any absent field, but Zod's .optional() and
@@ -32,7 +33,7 @@ export async function getContent(): Promise<{settings:typeof settings;projects:P
  // One projection per document type in sanity/schemaTypes/index.ts. Identity
  // copy (name, role lines, statement, links) stays in data.ts by design — it is
  // reviewed prose, not something to edit casually.
- const query=`{"projects":*[_type=="project"]|order(order asc){...,"slug":slug.current,"image":cover.asset->url,"previewPlaybackId":previewMux.asset->playbackId,"previewThumbTime":previewMux.asset->thumbTime,"github":links.github,"live":links.live},"stats":*[_type=="stat" && defined(sourceNote)]|order(order asc){value,label,sourceNote},"journey":*[_type=="experience"]|order(order asc){"role":position,"organization":company,period,location,"text":description,"bullets":responsibilities,"techs":technologies},"education":*[_type=="education"]|order(order asc){"role":degree,"organization":institution,period,location,"text":description,"bullets":responsibilities,"techs":technologies},"skillCategories":*[_type=="skillCategory"]|order(order asc){title,tools},"achievements":*[_type=="achievement"]|order(order asc){title,detail,kind},"faqs":*[_type=="chatFaq"]|order(order asc){question,answer}}`;
+ const query=`{"projects":*[_type=="project"]|order(order asc){...,"slug":slug.current,"image":cover.asset->url,"previewPlaybackId":previewMux.asset->playbackId,"previewThumbTime":previewMux.asset->thumbTime,"github":links.github,"live":links.live},"stats":*[_type=="stat" && defined(sourceNote)]|order(order asc){value,label,sourceNote},"journey":*[_type=="experience"]|order(order asc){"role":position,"organization":company,period,location,"text":description,"bullets":responsibilities,"techs":technologies},"education":*[_type=="education"]|order(order asc){"role":degree,"organization":institution,period,location,"text":description,"bullets":responsibilities,"techs":technologies},"skillCategories":*[_type=="skillCategory"]|order(order asc){title,tools},"achievements":*[_type=="achievement"]|order(order asc){title,detail,kind},"faqs":*[_type=="chatFaq"]|order(order asc){question,answer},"about":*[_type=="about"]|order(_createdAt asc)[0]{heading,statement,note}}`;
  try{
   const response=await fetch(`https://${id}.api.sanity.io/v2026-09-01/data/query/${dataset}?query=${encodeURIComponent(query)}`,{next:{revalidate:60,tags:['content']},signal:AbortSignal.timeout(5000)});
   if(!response.ok)throw new Error('CMS unavailable');
@@ -42,8 +43,12 @@ export async function getContent(): Promise<{settings:typeof settings;projects:P
   const categories=parseRows(categorySchema,result.skillCategories,'skillCategories',[]);
   const groups:Record<string,string[]>=Object.fromEntries(categories.filter(category=>category.tools.length).map(category=>[category.title,category.tools]));
 
+  // A half-filled about document keeps the reviewed copy rather than blanking the section.
+  const about=aboutSchema.safeParse(stripNulls(result.about));
+
   return{
    ...fallback,
+   settings:about.success?{...settings,statementHeading:about.data.heading,statement:about.data.statement,statementNote:about.data.note??''}:settings,
    projects:parseRows(projectSchema,result.projects,'projects',projects as Project[]) as Project[],
    stats:Array.isArray(result.stats)&&result.stats.length?result.stats:stats,
    journey:parseRows(entrySchema,result.journey,'experience',journey),

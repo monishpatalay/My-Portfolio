@@ -10,6 +10,7 @@
  *   education      → "My education & background" timeline
  *   skillCategory  → one filter chip in the skills cloud
  *   stat           → the four numbers below the opening statement
+ *   about          → the "A builder at heart." statement below the hero
  */
 
 import {defineType, defineField, defineArrayMember} from 'sanity';
@@ -247,6 +248,19 @@ const chatFaq = defineType({
   preview: {select: {title: 'question', subtitle: 'answer'}},
 });
 
+const about = defineType({
+  name: 'about',
+  title: 'About statement',
+  type: 'document',
+  description: 'The "A builder at heart." section below the hero. Only the first document is used; the assistant reads it too.',
+  fields: [
+    defineField({name: 'heading', type: 'string', initialValue: 'A builder at heart.', validation: rule => rule.required()}),
+    defineField({name: 'statement', title: 'Paragraph', type: 'text', rows: 5, validation: rule => rule.required()}),
+    defineField({name: 'note', title: 'Small note', type: 'string', description: 'Optional line under the paragraph, e.g. "Curious by default. Hands-on by choice."'}),
+  ],
+  preview: {select: {title: 'heading', subtitle: 'statement'}},
+});
+
 const achievement = defineType({
   name: 'achievement',
   title: 'Achievement',
@@ -265,4 +279,4 @@ const achievement = defineType({
   preview: {select: {title: 'title', subtitle: 'kind'}},
 });
 
-export const schemaTypes = [project, experience, education, skillCategory, stat, achievement, chatFaq];
+export const schemaTypes = [about, project, experience, education, skillCategory, stat, achievement, chatFaq];

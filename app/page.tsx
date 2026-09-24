@@ -15,7 +15,7 @@ export default async function Home() {
     <HomeMotion />
     <Hero profile={data.settings} />
     <section className="chapter statement" id="statement" data-shape="quote" aria-labelledby="statement-title">
-      <div className="statement-layout"><h2 id="statement-title" className="section-kicker">A builder at heart.</h2><div><p>{data.settings.statement}</p><p className="small-note">Curious by default. Hands-on by choice.</p></div></div>
+      <div className="statement-layout"><h2 id="statement-title" className="section-kicker">{data.settings.statementHeading}</h2><div><p>{data.settings.statement}</p>{data.settings.statementNote&&<p className="small-note">{data.settings.statementNote}</p>}</div></div>
     </section>
     <section className="chapter stats-section" id="numbers" data-shape="bars" aria-labelledby="numbers-title">
       <h2 id="numbers-title" className="sr-only">A few numbers, with context</h2>
