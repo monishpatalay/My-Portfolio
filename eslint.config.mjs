@@ -12,6 +12,15 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated or vendored output (all gitignored): Sanity studio build, Python venv, Playwright reports.
+    "dist/**",
+    ".venv/**",
+    "ml/.cache/**",
+    ".sanity/**",
+    "test-results/**",
+    "playwright-report/**",
+    "tests/e2e/artifacts/**",
+    "tests/e2e/tests/**",
   ]),
 ]);
 
