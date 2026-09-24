@@ -21,6 +21,12 @@
     cursor: var(--portfolio-link-cursor);
   }
 
+  /* Set by ProjectCard once the pointer rests over a playing preview. */
+  .portfolio-shell .rail-card[data-cursor-hidden] {
+    --portfolio-cursor: none;
+    --portfolio-link-cursor: none;
+  }
+
   .portfolio-shell :is(:disabled, [aria-disabled='true']) {
     cursor: not-allowed;
   }
