@@ -71,6 +71,13 @@ const project = defineType({
     }),
     defineField({name: 'cover', title: 'Cover image', type: 'image', options: {hotspot: true}}),
     defineField({
+      name: 'previewVideo',
+      title: 'Hover preview video',
+      type: 'file',
+      description: 'Optional short MP4 shown when this project card is hovered. Keep it compressed for fast loading.',
+      options: {accept: 'video/mp4'},
+    }),
+    defineField({
       name: 'color',
       type: 'string',
       description: 'Hex fallback behind the cover, e.g. #c7b5f1.',

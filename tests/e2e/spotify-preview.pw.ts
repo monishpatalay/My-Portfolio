@@ -6,7 +6,7 @@ test('project previews animate on hover and pause on exit',async({page})=>{
   for(const [title,name] of [['Spotify Library Organizer','spotify'],['Airbnc','airbnc']]){
     const card=page.locator('.rail-card').filter({hasText:title});
     const video=card.locator('video');
-    await expect(video).toHaveAttribute('src',`/videos/${name}-preview.mp4`);
+    await expect.poll(async()=>{const src=await video.getAttribute('src');return src===`/videos/${name}-preview.mp4`||src?.startsWith('https://cdn.sanity.io/files/')}).toBe(true);
     await expect(card.locator('.project-media img, .project-art').first()).toBeVisible();
     await expect(video).toHaveCSS('opacity','0');
     await card.hover();
