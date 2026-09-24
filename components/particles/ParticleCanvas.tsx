@@ -11,7 +11,7 @@ import {dur} from '@/lib/motion/tokens';
 import {bakeShape,shapeNames,type ShapeName} from './shapes';
 // REPEL_RADIUS is in world units; MORPH_RATE is the slow shape-to-shape blend, REPEL_RATE how fast
 // particles near the cursor chase their displaced goal.
-const simulation=`#define REPEL_RADIUS .7
+const simulation=`#define REPEL_RADIUS .58
 #define MORPH_RATE .065
 #define REPEL_RATE .34
 uniform sampler2D targetShape; uniform vec3 mouse; uniform float time; uniform float calm; uniform float attraction;
