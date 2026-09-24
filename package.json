@@ -36,7 +36,7 @@
     "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "sanity": "^6.13.2",
+    "sanity": "^6.16.0",
     "sanity-plugin-mux-input": "^5.0.12",
     "three": "^0.186.0",
     "zod": "^4.6.5"
