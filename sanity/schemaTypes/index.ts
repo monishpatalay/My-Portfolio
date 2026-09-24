@@ -71,11 +71,10 @@ const project = defineType({
     }),
     defineField({name: 'cover', title: 'Cover image', type: 'image', options: {hotspot: true}}),
     defineField({
-      name: 'previewVideo',
+      name: 'previewMux',
       title: 'Hover preview video',
-      type: 'file',
-      description: 'Optional short MP4 shown when this project card is hovered. Keep it compressed for fast loading.',
-      options: {accept: 'video/mp4'},
+      type: 'mux.video',
+      description: 'Optional clip shown when this project card is hovered. Upload any video; Mux streams it at up to 1080p and makes the poster.',
     }),
     defineField({
       name: 'color',

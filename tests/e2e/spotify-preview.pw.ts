@@ -5,8 +5,8 @@ test('project previews animate on hover and pause on exit',async({page})=>{
   await expect(page.getByRole('dialog',{name:'Loading',exact:true})).toBeHidden({timeout:15_000});
   for(const [title,name] of [['Spotify Library Organizer','spotify'],['Airbnc','airbnc']]){
     const card=page.locator('.rail-card').filter({hasText:title});
-    const video=card.locator('video');
-    await expect.poll(async()=>{const src=await video.getAttribute('src');return src===`/videos/${name}-preview.mp4`||src?.startsWith('https://cdn.sanity.io/files/')}).toBe(true);
+    const video=card.locator('video, mux-video');
+    await expect.poll(async()=>{const src=await video.getAttribute('src');if(await video.getAttribute('playback-id'))return true;return src===`/videos/${name}-preview.mp4`||src?.startsWith('https://cdn.sanity.io/files/')||src?.startsWith('https://stream.mux.com/')}).toBe(true);
     await expect.poll(()=>video.evaluate(node=>(node as HTMLVideoElement).preload)).toBe('auto');
     await expect.poll(()=>video.evaluate(node=>(node as HTMLVideoElement).readyState)).toBeGreaterThanOrEqual(3);
     await expect(card.locator('.project-media img, .project-art').first()).toBeVisible();
