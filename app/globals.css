@@ -77,3 +77,4 @@ button {
  .chip:hover,.socials a:hover,.project-links a:hover,.toc a:hover,.sample-digits button:hover,.suggestions button:hover,.rating button:hover,.chat-launcher:hover,.footer-top>a:hover,.footer-bottom a:hover,.next-project:hover{transform:translateY(calc(-2px * var(--motion-scale)))}
 }
 @media(max-width:700px){.play-layout{grid-template-columns:1fr}.doodle-panel,.prediction-panel,.network-panel{padding:22px}.play-mode>.mono{width:100%;margin:10px 0 0}.network-labels{font-size:8px;gap:10px}.network-panel svg{min-height:100px}.prediction-result strong{font-size:80px}}
+html[data-intro=seen] [data-preloader]{display:none}

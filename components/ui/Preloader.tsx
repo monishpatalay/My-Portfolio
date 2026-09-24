@@ -19,7 +19,7 @@
 
 'use client';
 
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import {cubicBezier} from 'motion/react';
 import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import {useMotionMode} from '@/lib/motion/governor';
@@ -75,6 +75,9 @@ const mixColor = (a: string, b: string, ratio: number) => {
   return `color-mix(in srgb, ${a} ${100 - r}%, ${b} ${r}%)`;
 };
 
+const MIN_DURATION_SEC = 2;
+const noSubscribe = () => () => {};
+
 function getStage(
   elapsed: number,
   duration: number,
@@ -83,13 +86,17 @@ function getStage(
   exitEase: (t: number) => number,
   reelEase: (t: number) => number,
 ): StageData {
-  const safeDuration = Math.max(2.5, duration);
+  const safeDuration = Math.max(MIN_DURATION_SEC, duration);
   const exitAnimSec = 0.45;
-  const titleFadeInSec = 0.35;
+  const titleFadeInSec = 0.3;
+  // Title hold and greeting fade scale with the duration, so a short intro
+  // still plays the whole reel and the title rather than dropping one.
+  const titleHoldSec = Math.min(1.5, safeDuration * 0.2);
+  const greetingFadeSec = Math.min(0.4, safeDuration * 0.08);
   const exitStartSec = Math.max(safeDuration - exitAnimSec, 0.5);
-  const titleStartSec = Math.max(0, exitStartSec - 1.5 - titleFadeInSec);
+  const titleStartSec = Math.max(0, exitStartSec - titleHoldSec - titleFadeInSec);
   const greetingFadeEndSec = titleStartSec;
-  const greetingMoveEndSec = Math.max(0, greetingFadeEndSec - 0.4);
+  const greetingMoveEndSec = Math.max(0, greetingFadeEndSec - greetingFadeSec);
   const tSec = elapsed;
 
   if (reducedMotion) {
@@ -148,7 +155,7 @@ function getStage(
 export default function Preloader({
   title = 'Loading… Please do not smash your screen.',
   greetings = ['Ciao', 'مرحبا', 'Bonjour', 'Hola', 'नमस्ते', 'Hello'],
-  duration = 5,
+  duration = 2.4,
   backgroundColor = '#070709',
   cardColor = 'rgba(18, 18, 24, 0.62)',
   borderColor = 'rgba(255,255,255,0.08)',
@@ -167,7 +174,11 @@ export default function Preloader({
   borderGlowSpeed = 3,
 }: PreloaderProps) {
   const [elapsed, setElapsed] = useState(0);
-  const [isActive, setIsActive] = useState(true);
+  const [isRunning, setIsActive] = useState(true);
+  // The layout's pre-paint script marks a tab that has already entered the site;
+  // hydration starts from the server's "not seen", then drops the overlay.
+  const introSeen = useSyncExternalStore(noSubscribe, () => document.documentElement.dataset.intro === 'seen', () => false);
+  const isActive = isRunning && !introSeen;
   const {mode} = useMotionMode();
   const reducedMotion = mode === 'calm';
 
@@ -195,7 +206,7 @@ export default function Preloader({
       if (start === null) start = time;
       const currentSec = (time - start) / 1000;
       setElapsed(currentSec);
-      if (currentSec >= Math.max(2.5, duration)) {
+      if (currentSec >= Math.max(MIN_DURATION_SEC, duration)) {
         setIsActive(false);
         return;
       }
@@ -251,7 +262,7 @@ export default function Preloader({
   // the landing page flashes before the overlay arrives. z-index keeps it above
   // everything regardless of where it sits in the tree.
   return (
-    <div style={{position: 'fixed', inset: 0, zIndex: 2147483647, pointerEvents: 'auto'}}>
+    <div data-preloader style={{position: 'fixed', inset: 0, zIndex: 2147483647, pointerEvents: 'auto'}}>
       <div
         role="dialog"
         aria-modal

@@ -11,6 +11,7 @@ import SiteShell from "@/components/ui/SiteShell";
 import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import {baseOpenGraph} from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,6 +31,7 @@ export const metadata: Metadata = {
   title: {default: "Monish Patalay — AI Engineer & Full-Stack Developer", template: "%s — Monish Patalay"},
   description:
     "Portfolio of Monish Patalay, M.S. Computer Science at Cal State LA, building intelligent systems and production-grade software end to end.",
+  openGraph: {...baseOpenGraph, type: "website", url: "/"},
 };
 
 // Pre-paint motion mode — PRD §14.4. Reads the explicit choice (cookie,
@@ -45,6 +47,10 @@ const MOTION_PREPAINT_SCRIPT = `
     if (mode === 'full' || mode === 'calm') {
       document.documentElement.dataset.motion = mode;
     }
+    try {
+      if (sessionStorage.getItem('intro-seen')) document.documentElement.dataset.intro = 'seen';
+      else sessionStorage.setItem('intro-seen', '1');
+    } catch (e) {}
     var t = document.cookie.match(/(?:^|; )theme=(dark|light)/);
     var theme = t ? t[1] : localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
