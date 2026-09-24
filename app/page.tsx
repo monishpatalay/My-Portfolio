@@ -7,6 +7,7 @@ import Rail from '@/components/rail/Rail';
 import Contact from '@/components/ui/Contact';
 import AskButton from '@/components/ui/AskButton';
 import {getContent} from '@/lib/content/server';
+import {SITE_URL} from '@/lib/site';
 
 export default async function Home() {
   const data = await getContent();
@@ -38,6 +39,6 @@ export default async function Home() {
       <div className="try-grid"><article className="try-card"><div className="teaser-doodle" aria-hidden="true">7<span> → 7?</span></div><h3>Human scribble.<br/>Machine guess.</h3><p>Draw a digit. Peek inside a neural network. See if you can beat the model.</p><Link className="button" href="/playground">Enter the playground ↗</Link></article><article className="try-card ai-teaser"><div className="teaser-bubble">“What has Monish built with AI?”</div><h3>Curious about<br/>the person behind it?</h3><p>Ask my AI assistant about the projects, the journey, or the tools I work with.</p><AskButton className="button">Start a conversation ↗</AskButton></article></div>
     </section>
     <Contact profile={data.settings}/>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@type':'Person',name:data.settings.name,url:'https://www.monishpatalay.dev',sameAs:[data.settings.github,data.settings.linkedin],alumniOf:{'@type':'CollegeOrUniversity',name:'California State University, Los Angeles'}}).replaceAll('<','\\u003c')}}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@type':'Person',name:data.settings.name,url:SITE_URL,jobTitle:data.settings.roleLines[0],description:data.settings.statement,email:`mailto:${data.settings.email}`,homeLocation:{'@type':'Place',name:data.settings.location},knowsAbout:Object.values(data.skillGroups).flat(),sameAs:[data.settings.github,data.settings.linkedin],alumniOf:{'@type':'CollegeOrUniversity',name:'California State University, Los Angeles'}}).replaceAll('<','\\u003c')}}/>
   </main>;
 }
