@@ -75,7 +75,7 @@ const mixColor = (a: string, b: string, ratio: number) => {
   return `color-mix(in srgb, ${a} ${100 - r}%, ${b} ${r}%)`;
 };
 
-const MIN_DURATION_SEC = 2;
+const MIN_DURATION_SEC = 2.5;
 const noSubscribe = () => () => {};
 
 function getStage(
@@ -88,15 +88,11 @@ function getStage(
 ): StageData {
   const safeDuration = Math.max(MIN_DURATION_SEC, duration);
   const exitAnimSec = 0.45;
-  const titleFadeInSec = 0.3;
-  // Title hold and greeting fade scale with the duration, so a short intro
-  // still plays the whole reel and the title rather than dropping one.
-  const titleHoldSec = Math.min(1.5, safeDuration * 0.2);
-  const greetingFadeSec = Math.min(0.4, safeDuration * 0.08);
+  const titleFadeInSec = 0.35;
   const exitStartSec = Math.max(safeDuration - exitAnimSec, 0.5);
-  const titleStartSec = Math.max(0, exitStartSec - titleHoldSec - titleFadeInSec);
+  const titleStartSec = Math.max(0, exitStartSec - 1.5 - titleFadeInSec);
   const greetingFadeEndSec = titleStartSec;
-  const greetingMoveEndSec = Math.max(0, greetingFadeEndSec - greetingFadeSec);
+  const greetingMoveEndSec = Math.max(0, greetingFadeEndSec - 0.4);
   const tSec = elapsed;
 
   if (reducedMotion) {
@@ -155,7 +151,7 @@ function getStage(
 export default function Preloader({
   title = 'Loading… Please do not smash your screen.',
   greetings = ['Ciao', 'مرحبا', 'Bonjour', 'Hola', 'नमस्ते', 'Hello'],
-  duration = 2.4,
+  duration = 5,
   backgroundColor = '#070709',
   cardColor = 'rgba(18, 18, 24, 0.62)',
   borderColor = 'rgba(255,255,255,0.08)',
