@@ -27,6 +27,8 @@
   --glass-soft: rgba(255, 255, 255, 0.025);
   --scrim: color-mix(in srgb, var(--bg) 91%, transparent);
   --scrim-strong: color-mix(in srgb, var(--bg) 95%, transparent);
+  --cursor-glow: color-mix(in srgb, var(--accent) 20%, transparent);
+  --cursor-glow-blend: screen;
   --text-muted: #b1a7bc;
   --text-faint: #8e849c;
   --on-accent: #17101f;
@@ -151,6 +153,8 @@
    Only the palette is redefined; every layout rule is shared. --accent-soft is
    darkened here because the dark-mode lilac fails contrast on white. */
 :root[data-theme="light"] {
+  --cursor-glow: color-mix(in srgb, var(--accent) 9%, transparent);
+  --cursor-glow-blend: multiply;
   --bg: #fbfbfd;
   --bg-deep: #eeeef2;
   --surface: #ffffff;

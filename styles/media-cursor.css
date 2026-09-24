@@ -31,6 +31,33 @@
     cursor: not-allowed;
   }
 
+  /* Site-wide spotlight (components/ui/CursorGlow.tsx). Above sections, below the nav (z 40), chat and overlays. */
+  .cursor-glow {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 30;
+    width: 360px;
+    height: 360px;
+    margin: -180px 0 0 -180px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, var(--cursor-glow) 0%, transparent 70%);
+    mix-blend-mode: var(--cursor-glow-blend);
+    opacity: 0;
+    transition: opacity var(--dur-250, 250ms) ease-out;
+    will-change: transform;
+  }
+
+  .cursor-glow[data-visible='true'] {
+    opacity: 1;
+  }
+
+  /* Stays hidden with the cursor while it rests over a playing preview. */
+  html:has(.rail-card[data-cursor-hidden]) .cursor-glow {
+    opacity: 0;
+  }
+
   html[data-motion='calm'] .portfolio-shell {
     --portfolio-cursor: auto;
     --portfolio-link-cursor: pointer;
