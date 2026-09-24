@@ -51,6 +51,21 @@ const project = defineType({
       validation: rule => rule.required().max(200),
     }),
     defineField({
+      name: 'seoTitle',
+      title: 'SEO title',
+      type: 'string',
+      description: 'Optional. The Google result title; " — Monish Patalay" is appended. Falls back to the title.',
+      validation: rule => rule.max(45).warning('Keep it under 45 characters so Google shows it in full.'),
+    }),
+    defineField({
+      name: 'seoDescription',
+      title: 'SEO description',
+      type: 'text',
+      rows: 3,
+      description: 'Optional. The Google result snippet: what it is, and the key tech. Falls back to the summary.',
+      validation: rule => rule.min(110).max(160).warning('Aim for 110–160 characters.'),
+    }),
+    defineField({
       name: 'category',
       type: 'string',
       options: {list: PROJECT_CATEGORIES, layout: 'radio'},
