@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:cursor": "playwright test --config playwright.cursor.config.ts",
     "test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "feedback": "tsx --env-file=.env.local scripts/chat-feedback.mts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
