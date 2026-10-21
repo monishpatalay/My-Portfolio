@@ -70,3 +70,19 @@
     }
   }
 }
+
+.project-preview-container { position: relative; }
+.project-preview-sound {
+  position: absolute;
+  right: 7%;
+  bottom: 7%;
+  z-index: 4;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #ffffff80;
+  border-radius: 999px;
+  background: #151515e6;
+  color: #fff;
+  font-size: 12px;
+}
