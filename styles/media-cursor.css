@@ -86,3 +86,17 @@
   color: #fff;
   font-size: 12px;
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .project-preview-sound {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-250, 250ms) ease-out;
+  }
+
+  .rail-card[data-preview-hovered]:not([data-cursor-hidden]) .project-preview-sound,
+  .project-preview-sound:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
