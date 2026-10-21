@@ -79,3 +79,40 @@ test('sound control follows cursor activity and remains keyboard accessible',asy
   await sound.press('Enter');
   await expect.poll(()=>card.locator('.project-preview-video').evaluate(node=>(node as HTMLVideoElement).paused)).toBe(false);
 });
+
+test('homepage sound clicks keep the rail still while keyboard focus still aligns cards',async({page})=>{
+  await page.goto('/',{waitUntil:'domcontentloaded'});
+  await expect(page.getByRole('dialog',{name:'Loading',exact:true})).toBeHidden({timeout:15_000});
+  await page.locator('h1').click();
+  const rail=page.locator('#work');
+  await expect(rail).toHaveAttribute('data-rail-state','pinned');
+  await rail.evaluate(node=>window.scrollTo({top:node.getBoundingClientRect().top+scrollY+230,behavior:'instant'}));
+  const cards=rail.locator('.rail-card');
+  const card=cards.nth(1),video=card.locator('.project-preview-video');
+  await expect.poll(()=>video.evaluate(node=>(node as HTMLVideoElement).readyState)).toBeGreaterThanOrEqual(3);
+  const sound=card.getByRole('button',{name:'Preview sound'});
+  const bounds=await sound.boundingBox();
+  if(!bounds)throw new Error('Sound control has no layout');
+  const x=bounds.x+25,y=bounds.y+20;
+  await page.mouse.move(x-5,y-5);
+  await page.mouse.move(x,y);
+  await expect(video).toHaveCSS('opacity','1');
+  await expect(sound).toHaveCSS('opacity','1');
+  const previous=await sound.getAttribute('aria-pressed');
+  const [frames]=await Promise.all([
+    video.evaluate(node=>new Promise<{scrollY:number;width:number;opacity:number}[]>(resolve=>{
+      const start=performance.now(),samples:{scrollY:number;width:number;opacity:number}[]=[];
+      const sample=()=>{samples.push({scrollY,width:node.getBoundingClientRect().width,opacity:Number(getComputedStyle(node).opacity)});if(performance.now()-start<1000)requestAnimationFrame(sample);else resolve(samples);};sample();
+    })),
+    page.mouse.click(x,y,{delay:70}),
+  ]);
+  await expect(sound).toHaveAttribute('aria-pressed',previous==='true'?'false':'true');
+  expect(Math.max(...frames.map(f=>f.scrollY))-Math.min(...frames.map(f=>f.scrollY))).toBeLessThan(2);
+  expect(Math.max(...frames.map(f=>f.width))-Math.min(...frames.map(f=>f.width))).toBeLessThan(2);
+  expect(Math.min(...frames.map(f=>f.opacity))).toBeGreaterThan(.99);
+  await cards.first().locator('.project-links a').last().focus();
+  await page.keyboard.press('Tab');
+  await expect(sound).toBeFocused();
+  await expect(rail).toHaveAttribute('data-rail-index','1');
+  await expect.poll(()=>card.evaluate(node=>Math.round(node.getBoundingClientRect().left))).toBe(72);
+});

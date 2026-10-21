@@ -32,7 +32,8 @@ export default function Rail({projects}:{projects:Project[]}){
  const armed=()=>{document.documentElement.style.overscrollBehaviorX=lenis.targetScroll>=st.start-innerHeight*.25&&lenis.targetScroll<=st.end?'none':'';};lenis.on('scroll',armed);
  const jump=(i:number)=>{lenis.scrollTo(st.start+stops[clamp(i,0,stops.length-1)],{duration:dur.slow,onComplete:announce});};
  const key=(event:KeyboardEvent)=>{if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||(event.target as HTMLElement).matches('input,textarea,select'))return;const current=nearestStop(stops,lenis.targetScroll-st.start);let next=current;if(event.key==='ArrowRight'||event.key==='PageDown')next++;else if(event.key==='ArrowLeft'||event.key==='PageUp')next--;else if(event.key==='Home')next=0;else if(event.key==='End')next=stops.length-1;else return;if(next<0||next>=stops.length)return;event.preventDefault();jump(next);};
- const focus=(event:FocusEvent)=>{const item=(event.target as HTMLElement).closest('.rail-item');if(item)jump(Array.from(list.children).indexOf(item));};
+ // Native focus-visible keeps keyboard alignment without snapping on pointer clicks.
+ const focus=(event:FocusEvent)=>{const target=event.target as HTMLElement;if(!target.matches(':focus-visible'))return;const item=target.closest('.rail-item');if(item)jump(Array.from(list.children).indexOf(item));};
  const suppress=(event:MouseEvent)=>{if(dragged){event.preventDefault();event.stopPropagation();dragged=false;}};
  // Observer's release fires for a pointer-up anywhere on the page, not just one
  // that began on the rail. Both handlers clamp into the pinned range, so without
