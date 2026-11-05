@@ -1,11 +1,12 @@
-export const shapeNames=['wordmark','quote','bars','grid','helix','sphere','chat','envelope','404','brain'] as const;
+export const shapeNames=['halo','quote','bars','grid','helix','sphere','chat','envelope','404','brain'] as const;
 export type ShapeName=typeof shapeNames[number];
 export function bakeShape(name:ShapeName,count:number):Float32Array {
  const result=new Float32Array(count*4);let seed=42;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
  const pixels:number[]=[];
- if(['wordmark','quote','404'].includes(name)&&typeof document!=='undefined'){const c=document.createElement('canvas');c.width=1000;c.height=400;const ctx=c.getContext('2d')!;ctx.fillStyle='white';ctx.textAlign='center';ctx.font='700 140px Inter, sans-serif';if(name==='wordmark'){ctx.fillText('MONISH',500,165);ctx.fillText('PATALAY',500,320);}else ctx.fillText(name==='quote'?'“':'404',500,270);const data=ctx.getImageData(0,0,1000,400).data;for(let y=0;y<400;y+=2)for(let x=0;x<1000;x+=2)if(data[(y*1000+x)*4+3]>100)pixels.push(x,y);}
+ if(['quote','404'].includes(name)&&typeof document!=='undefined'){const c=document.createElement('canvas');c.width=1000;c.height=400;const ctx=c.getContext('2d')!;ctx.fillStyle='white';ctx.textAlign='center';ctx.font='700 140px Inter, sans-serif';ctx.fillText(name==='quote'?'“':'404',500,270);const data=ctx.getImageData(0,0,1000,400).data;for(let y=0;y<400;y+=2)for(let x=0;x<1000;x+=2)if(data[(y*1000+x)*4+3]>100)pixels.push(x,y);}
  for(let i=0;i<count;i++){const a=random()*Math.PI*2,t=i/count;let x=0,y=0,z=(random()-.5)*.12;
  if(pixels.length){const j=Math.floor(random()*pixels.length/2)*2;x=(pixels[j]/1000-.5)*6;y=(.5-pixels[j+1]/400)*2.4;}
+ else if(name==='halo'){if(i%5<2){const r=i%5===0?[1.9,1,.5]:[2.5,1.3,-.32],w=(random()-.5)*.05;const ex=Math.cos(a)*(r[0]+w),ey=Math.sin(a)*(r[1]+w);x=ex*Math.cos(r[2])-ey*Math.sin(r[2]);y=ex*Math.sin(r[2])+ey*Math.cos(r[2]);z=-.6+z;}else{x=(random()-.5)*9;y=(random()-.5)*5;z=-2.5-random()*2;}}
  else if(name==='helix'){x=Math.cos(t*30)*1.2;y=(t-.5)*5;z=Math.sin(t*30);}
  else if(name==='sphere'||name==='brain'){const phi=Math.acos(1-2*t),theta=Math.PI*(1+Math.sqrt(5))*i;x=Math.sin(phi)*Math.cos(theta)*2;y=Math.cos(phi)*2;z=Math.sin(phi)*Math.sin(theta);if(name==='brain'){x*=.8;y*=.9;z*=.5;x+=Math.sin(y*10)*.13;}}
  else if(name==='bars'){const col=i%5;x=(col-2)*.75+random()*.5;y=-1.5+random()*(col*.55+.6);}
